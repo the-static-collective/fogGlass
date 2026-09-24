@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>FOG GLASSES 001</title>
+<style>
+  :root{--bg:#0d1117;--panel:#151b23;--panel2:#1b2430;--ink:#e6edf3;--muted:#9ba7b4;--line:#34404d;--hot:#f0f6fc;--soft:#222c38;--warn:#d29922;--bad:#f85149;--ok:#3fb950}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  button,input,select,textarea{font:inherit;color:inherit;background:#0f151d;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+  button{cursor:pointer} button:hover{border-color:#768390;background:#17202a}.primary{background:#e6edf3;color:#111;border-color:#e6edf3}.primary:hover{background:white}
+  .shell{display:grid;grid-template-rows:auto auto 1fr;min-height:100vh}.top{padding:13px 16px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .brand{font-weight:800;letter-spacing:.08em}.law{color:var(--muted);font-size:12px;max-width:760px}.tools{display:flex;gap:7px;flex-wrap:wrap}
+  .lenses{display:flex;gap:6px;padding:8px 16px;border-bottom:1px solid var(--line);overflow:auto}.lens.active{background:var(--hot);color:#111;border-color:var(--hot)}
+  .main{display:grid;grid-template-columns:minmax(0,1fr) 340px;min-height:0}.stage{padding:18px;overflow:auto}.caddy{border-left:1px solid var(--line);background:#10161e;padding:14px;overflow:auto}
+  h1,h2,h3,p{margin-top:0}.small{font-size:12px;color:var(--muted)}.mono{white-space:pre-wrap}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.stack{display:grid;gap:10px}
+  .source{background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:12px;margin-bottom:14px}.source strong{display:block;margin-bottom:5px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px;position:relative}.card.selected{outline:2px solid #a5d6ff}
+  .badge{display:inline-block;padding:2px 7px;border:1px solid var(--line);border-radius:999px;font-size:11px;margin:0 4px 4px 0;color:#c9d1d9}.badge.outside{border-color:var(--bad);color:#ffb4ad}.badge.single{border-color:var(--ok);color:#8ddb8c}.badge.amb{border-color:var(--warn);color:#f2cc60}
+  .cand{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.candidate{padding:4px 7px;border:1px solid #566272;border-radius:6px;background:#0f151d}
+  .meter{height:7px;background:#0c1219;border:1px solid var(--line);border-radius:999px;overflow:hidden}.meter>i{display:block;height:100%;background:#77828d}
+  .receipt{border-left:2px solid #566272;padding-left:9px;margin:7px 0;color:#c9d1d9}.receipt .kind{color:#8b949e;text-transform:uppercase;font-size:10px}
+  .lamp{border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--panel);margin-bottom:8px}.lamp.direct{border-color:#8b949e}.lamp .match{font-size:10px;color:var(--muted);float:right;text-transform:uppercase}.lamp button{width:100%;margin-top:7px}
+  .section{padding:11px 0;border-top:1px solid var(--line)}.section:first-child{border-top:0;padding-top:0}.section h3{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#b1bac4;margin-bottom:9px}
+  label{display:grid;gap:4px;color:#b1bac4;font-size:12px}textarea{min-height:76px;resize:vertical;width:100%}input,select{width:100%}
+  .spatialWrap{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}.spatialHead{padding:12px;border-bottom:1px solid var(--line)}svg{width:100%;height:520px;display:block;background:#0b1016}.edge{stroke:#6e7681;stroke-width:2}.edge.dashed{stroke-dasharray:6 5}.node{fill:#17212b;stroke:#8b949e;stroke-width:2}.nodeText{fill:#f0f6fc;font-size:13px}.edgeText{fill:#8b949e;font-size:10px}
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pane{border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:12px;min-height:260px}.choicebar{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.choicebar button{flex:1;min-width:90px}
+  pre{background:#080d12;border:1px solid var(--line);padding:12px;border-radius:10px;overflow:auto;color:#c9d1d9}.history{max-height:300px;overflow:auto}.hist{padding:8px 0;border-bottom:1px solid var(--line);font-size:12px}.hist:last-child{border-bottom:0}
+  dialog{max-width:680px;width:calc(100% - 30px);background:#111821;color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:0}dialog::backdrop{background:#000a}.dlg{padding:16px}.dlg footer{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+  .drop{border:1px dashed #566272;padding:16px;text-align:center;border-radius:10px;color:var(--muted)}.drop.drag{border-color:#c9d1d9;background:#17202a}
+  .notice{border-left:3px solid #6e7681;padding:8px 10px;background:#111821;margin:10px 0}.outsideBlock{border-left-color:var(--bad)}
+  @media(max-width:900px){.main{grid-template-columns:1fr}.caddy{border-left:0;border-top:1px solid var(--line)}.compare{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <div><div class="brand">FOG GLASSES / 001</div><div class="law">THE GLASSES MAY CHANGE WHAT YOU CAN DISTINGUISH. THEY MAY NOT CHANGE THE WORLD TO MAKE IT EASIER TO SEE.</div></div>
+    <div class="tools">
+      <button id="loadBtn">Import</button><button id="resetBtn">Specimen</button><button id="addAddressBtn">+ Fog Address</button><button id="makeLampBtn">+ Make a Lamp</button><button class="primary" id="exportBtn">Export Receipt</button>
+    </div>
+  </header>
+  <nav class="lenses" id="lensBar">
+    <button class="lens active" data-lens="look">LOOK</button>
+    <button class="lens" data-lens="fog">FOG</button>
+    <button class="lens" data-lens="spatial">SPATIAL</button>
+    <button class="lens" data-lens="optometry">OPTOMETRY</button>
+    <button class="lens" data-lens="raw">RAW</button>
+  </nav>
+  <div class="main">
+    <main class="stage" id="stage"></main>
+    <aside class="caddy" id="caddy"></aside>
+  </div>
+</div>
+<input type="file" id="fileInput" accept="application/json,.json" hidden />
+
+<dialog id="illumDialog"><form method="dialog" class="dlg" id="illumForm">
+  <h2 id="illumTitle">Shine lamp</h2>
+  <div class="stack">
+    <label>Angle / configuration<input id="illumAngle" placeholder="e.g. compare omissions rather than assertions" /></label>
+    <label>Selection origin<select id="illumOrigin"><option value="caddy">caddy</option><option value="human">human</option><option value="intuition">intuition</option><option value="custom">custom</option></select></label>
+    <label>Observed effect<select id="illumEffect"><option value="distinction-exposed">distinction exposed</option><option value="no-change">no change</option><option value="new-fog">new fog exposed</option><option value="conflict-increased">conflict increased</option><option value="outside-model">outside-model signal</option></select></label>
+    <label>After candidates (comma separated; leave unchanged if appropriate)<input id="illumAfter" /></label>
+    <label>Observation / receipt<textarea id="illumObservation" placeholder="What did the probe actually reveal? Do not write what you hoped it would reveal."></textarea></label>
+    <label>New fog composition (comma separated, optional)<input id="illumNewFog" placeholder="e.g. provenance-break, timestamp-conflict" /></label>
+  </div>
+  <footer><button value="cancel">Cancel</button><button class="primary" id="recordIllumBtn" value="default">Record illumination</button></footer>
+</form></dialog>
+
+<dialog id="lampDialog"><form method="dialog" class="dlg" id="lampForm">
+  <h2>Make a lamp</h2><div class="stack">
+    <label>Name<input id="lampName" required placeholder="e.g. reverse chronology" /></label>
+    <label>Description<textarea id="lampDesc" placeholder="What operation does this lamp perform?"></textarea></label>
+    <label>Addresses it is declared for (comma separated IDs)<input id="lampAddresses" placeholder="p, q" /></label>
+    <label>May reveal (comma separated)<input id="lampReveal" placeholder="ordering, source-dependence" /></label>
+  </div><footer><button value="cancel">Cancel</button><button class="primary" id="saveLampBtn" value="default">Add lamp</button></footer>
+</form></dialog>
+
+<dialog id="addressDialog"><form method="dialog" class="dlg" id="addressForm">
+  <h2>Add fog address</h2><div class="stack">
+    <label>ID<input id="addrId" required placeholder="s1" /></label>
+    <label>Label<input id="addrLabel" required placeholder="Unresolved source lineage" /></label>
+    <label>Question / note<textarea id="addrNote"></textarea></label>
+    <label>Live candidates (comma separated; empty means OUTSIDE)<input id="addrCandidates" /></label>
+    <label>Fog composition (comma separated)<input id="addrComposition" placeholder="missing, conflict, indiscernibility" /></label>
+    <label>Origin<select id="addrOrigin"><option>unknown</option><option>world</option><option>instrument</option><option>observer</option><option>model</option><option>question</option><option>receipt-field</option><option>model-or-world</option></select></label>
+    <label>First receipt<textarea id="addrReceipt"></textarea></label>
+  </div><footer><button value="cancel">Cancel</button><button class="primary" id="saveAddressBtn" value="default">Add address</button></footer>
+</form></dialog>
+
+<script>
+const specimen = {
+  title:"Hostile Fog Specimen",
+  source:"Two unresolved addresses have the same candidate count but different candidate identities and useful probes. A third observation is outside the declared model rather than maximally ambiguous.",
+  addresses:[
+    {id:"p",label:"Receipt cluster P",note:"Who generated the duplicated line?",candidates:["A","B"],fog:{density:.55,grain:"coarse",composition:["provenance-break","indiscernibility"],depth:2,motion:"stable",persistence:3,origin:"unknown"},receipts:[{id:"r1",kind:"claim",text:"A and B reproduce the same sentence."},{id:"r2",kind:"missing",text:"Original source lineage is unavailable."}]},
+    {id:"q",label:"Receipt cluster Q",note:"Which event ordering is compatible?",candidates:["C","D"],fog:{density:.55,grain:"fine",composition:["timestamp-conflict","indiscernibility"],depth:3,motion:"drifting",persistence:1,origin:"receipt-field"},receipts:[{id:"r3",kind:"conflict",text:"Receipt 3 places the event before publication."},{id:"r4",kind:"conflict",text:"Receipt 4 places publication before the event."}]},
+    {id:"r",label:"Outside-model observation",note:"No declared candidate explains the observation.",candidates:[],fog:{density:0,grain:"n/a",composition:["outside-model"],depth:1,motion:"unknown",persistence:1,origin:"model-or-world"},receipts:[{id:"r5",kind:"outside",text:"Observation is incompatible with all declared candidates."}]}
+  ],
+  lamps:[
+    {id:"provenance",name:"Provenance Trace",description:"Follow source lineage and copy relationships.",distinguishes:[{address:"p",pairs:[["A","B"]]}],may_reveal:["copy-chain","missing-origin","source-dependence"]},
+    {id:"chronology",name:"Chronology",description:"Inspect ordering, timestamps, and known-at relations.",distinguishes:[{address:"q",pairs:[["C","D"]]}],may_reveal:["ordering","timestamp-drift","publication-lag"]},
+    {id:"model-boundary",name:"Model Boundary Test",description:"Ask whether the declared candidate family is itself incomplete.",distinguishes:[{address:"r",pairs:[]}],may_reveal:["outside-domain","new-candidate-needed"]}
+  ]
+};
+let state = {data:structuredClone(specimen),lens:"look",selected:"p",history:[],optA:"fog",optB:"spatial"};
+let pendingLamp = null;
+const $ = s=>document.querySelector(s), esc=s=>String(s??"").replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function addr(){return state.data.addresses.find(a=>a.id===state.selected)||state.data.addresses[0]}
+function status(a){return a.candidates.length===0?"OUTSIDE":a.candidates.length===1?"SINGLETON":"AMBIGUOUS"}
+function badgeClass(a){return a.candidates.length===0?"outside":a.candidates.length===1?"single":"amb"}
+function pairKey(a,b){return [a,b].sort().join("↔")}
+function currentPairs(a){const out=[];for(let i=0;i<a.candidates.length;i++)for(let j=i+1;j<a.candidates.length;j++)out.push([a.candidates[i],a.candidates[j]]);return out}
+function lampMatch(l,a){const d=(l.distinguishes||[]).find(x=>x.address===a.id);if(d)return "direct";return "undeclared"}
+function render(){renderStage();renderCaddy();document.querySelectorAll('.lens').forEach(b=>b.classList.toggle('active',b.dataset.lens===state.lens))}
+function sourceBlock(){return `<div class="source"><strong>${esc(state.data.title||"Untitled receipt field")}</strong><div>${esc(state.data.source||"No source note supplied.")}</div></div>`}
+function addressCard(a,expanded=false){const st=status(a);return `<article class="card ${a.id===state.selected?'selected':''}" data-address="${esc(a.id)}">
+  <div class="row" style="justify-content:space-between"><strong>${esc(a.label)}</strong><span class="badge ${badgeClass(a)}">${st}</span></div>
+  <div class="small">address: ${esc(a.id)} · origin: ${esc(a.fog?.origin||"unknown")}</div><p>${esc(a.note||"")}</p>
+  <div class="cand">${a.candidates.length?a.candidates.map(c=>`<span class="candidate">${esc(c)}</span>`).join(''):'<span class="candidate">{ }</span>'}</div>
+  ${expanded?fogDetails(a):''}
+  <button onclick="selectAddress('${esc(a.id)}')">Inspect address</button>
+</article>`}
+function fogDetails(a){const f=a.fog||{};return `<div class="small">density (descriptive, not probability)</div><div class="meter"><i style="width:${Math.max(0,Math.min(100,(f.density||0)*100))}%"></i></div>
+<div style="margin-top:8px">${(f.composition||[]).map(x=>`<span class="badge">${esc(x)}</span>`).join('')||'<span class="badge">untyped</span>'}</div>
+<div class="small">grain ${esc(f.grain||"unknown")} · depth ${esc(f.depth??"?")} · motion ${esc(f.motion||"unknown")} · persistence ${esc(f.persistence??"?")}</div>
+<div style="margin-top:10px">${(a.receipts||[]).map(r=>`<div class="receipt"><div class="kind">${esc(r.kind)}</div>${esc(r.text)}</div>`).join('')}</div>`}
+function renderStage(){const stage=$('#stage');if(state.lens==='look')stage.innerHTML=renderLook();if(state.lens==='fog')stage.innerHTML=renderFog();if(state.lens==='spatial')stage.innerHTML=renderSpatial();if(state.lens==='optometry')stage.innerHTML=renderOptometry();if(state.lens==='raw')stage.innerHTML=renderRaw();}
+function renderLook(){return sourceBlock()+`<div class="notice">LOOK keeps the supplied material primary. Select an address to inspect local unresolved structure; no global confidence score is computed.</div><div class="grid">${state.data.addresses.map(a=>addressCard(a,false)).join('')}</div>`}
+function renderFog(){return sourceBlock()+`<div class="notice">FOG foregrounds where distinction fails, between which live candidates, and what the fog is made of. Equal density does not imply equal uncertainty geometry.</div><div class="grid">${state.data.addresses.map(a=>addressCard(a,true)).join('')}</div>`}
+function renderSpatial(){const a=addr(); if(!a)return '<p>No address.</p>'; if(a.candidates.length===0)return sourceBlock()+`<div class="notice outsideBlock"><strong>OUTSIDE ≠ MAXIMUM FOG.</strong><br>No declared candidate is compatible here. Use a model-boundary lamp or add candidates; do not render this as an extremely ambiguous cluster.</div>`;
+ const n=a.candidates.length,cx=360,cy=250,r=Math.min(180,90+n*22);const nodes=a.candidates.map((c,i)=>({c,x:cx+r*Math.cos((i/n)*Math.PI*2-Math.PI/2),y:cy+r*Math.sin((i/n)*Math.PI*2-Math.PI/2)}));
+ let edges=''; const pairs=currentPairs(a); pairs.forEach(([x,y])=>{const nx=nodes.find(n=>n.c===x),ny=nodes.find(n=>n.c===y);const lamps=state.data.lamps.filter(l=>{const d=(l.distinguishes||[]).find(d=>d.address===a.id);return d&&(d.pairs||[]).some(p=>pairKey(...p)===pairKey(x,y))});const label=lamps.length?lamps.map(l=>l.name).join(', '):'NO DECLARED LAMP';edges+=`<line class="edge ${lamps.length?'':'dashed'}" x1="${nx.x}" y1="${nx.y}" x2="${ny.x}" y2="${ny.y}"/><text class="edgeText" x="${(nx.x+ny.x)/2}" y="${(nx.y+ny.y)/2-6}" text-anchor="middle">${esc(label)}</text>`});
+ const nodeSvg=nodes.map(n=>`<circle class="node" cx="${n.x}" cy="${n.y}" r="30"/><text class="nodeText" x="${n.x}" y="${n.y+4}" text-anchor="middle">${esc(n.c)}</text>`).join('');
+ return `<div class="spatialWrap"><div class="spatialHead"><strong>${esc(a.label)}</strong><div class="small">Edges are candidate collisions. Solid edge = at least one declared distinguishing lamp. Dashed = no current lamp in the caddy.</div></div><svg viewBox="0 0 720 500">${edges}${nodeSvg}</svg></div>`}
+function miniView(kind,a){if(kind==='look')return `<h3>LOOK</h3><p>${esc(a.note)}</p><div class="cand">${a.candidates.map(c=>`<span class="candidate">${esc(c)}</span>`).join('')||'{ }'}</div>`;if(kind==='fog')return `<h3>FOG</h3>${fogDetails(a)}`;if(kind==='raw')return `<h3>RAW</h3><pre>${esc(JSON.stringify(a,null,2))}</pre>`;if(kind==='spatial'){const pairs=currentPairs(a);return `<h3>SPATIAL</h3><p>${pairs.length?pairs.map(p=>esc(pairKey(...p))).join('<br>'):'OUTSIDE / no candidate-pair geometry'}</p><div class="small">Use full SPATIAL lens for graph.</div>`}return ''}
+function renderOptometry(){const a=addr();const opts=['look','fog','spatial','raw'];return `<div class="notice"><strong>Better one / better two?</strong> Compare ways of seeing the same supplied state. This records perceptual usefulness, not which candidate is true.</div>
+<div class="row" style="margin-bottom:10px"><label>Lens 1<select id="optA">${opts.map(x=>`<option ${x===state.optA?'selected':''}>${x}</option>`).join('')}</select></label><label>Lens 2<select id="optB">${opts.map(x=>`<option ${x===state.optB?'selected':''}>${x}</option>`).join('')}</select></label></div>
+<div class="compare"><div class="pane">${miniView(state.optA,a)}</div><div class="pane">${miniView(state.optB,a)}</div></div>
+<div class="choicebar"><button onclick="recordOpt('one')">Better 1</button><button onclick="recordOpt('two')">Better 2</button><button onclick="recordOpt('both')">Both</button><button onclick="recordOpt('neither')">Neither</button></div>`}
+function renderRaw(){return sourceBlock()+`<pre>${esc(JSON.stringify({addresses:state.data.addresses,lamps:state.data.lamps,illumination_history:state.history},null,2))}</pre>`}
+function renderCaddy(){const a=addr();if(!a){$('#caddy').innerHTML='<p>No address.</p>';return}const lamps=[...state.data.lamps].sort((x,y)=>(lampMatch(x,a)==='direct'?-1:1)-(lampMatch(y,a)==='direct'?-1:1));$('#caddy').innerHTML=`
+<div class="section"><h3>Lamp Caddy</h3><strong>${esc(a.label)}</strong><div class="small">${esc(a.id)} · ${status(a)}</div><div class="cand">${a.candidates.map(c=>`<span class="candidate">${esc(c)}</span>`).join('')||'<span class="candidate">{ }</span>'}</div></div>
+<div class="section"><h3>Available lights</h3>${lamps.map(l=>`<div class="lamp ${lampMatch(l,a)}"><span class="match">${lampMatch(l,a)}</span><strong>${esc(l.name)}</strong><div class="small">${esc(l.description||'')}</div><div style="margin-top:5px">${(l.may_reveal||[]).map(x=>`<span class="badge">${esc(x)}</span>`).join('')}</div><button onclick="shine('${esc(l.id)}')">Shine here</button></div>`).join('')}</div>
+<div class="section"><h3>Current fog</h3>${(a.fog?.composition||[]).map(x=>`<span class="badge">${esc(x)}</span>`).join('')||'untyped'}<div class="small" style="margin-top:6px">Origin remains ${esc(a.fog?.origin||'unknown')} unless a receipt supports something stronger.</div></div>
+<div class="section"><h3>Illumination receipts</h3><div class="history">${state.history.filter(h=>h.address===a.id).slice().reverse().map(h=>`<div class="hist"><strong>${esc(h.lamp_name)}</strong> · ${esc(h.effect)}<br><span class="small">${esc(h.selection_origin)} / ${esc(h.angle||'default angle')}</span><br>${esc(h.observation||'no observation text')}</div>`).join('')||'<div class="small">No lamp has been used here yet.</div>'}</div></div>`}
+window.selectAddress=id=>{state.selected=id;render()};
+window.shine=id=>{pendingLamp=state.data.lamps.find(l=>l.id===id);const a=addr();$('#illumTitle').textContent=`${pendingLamp.name} → ${a.label}`;$('#illumAfter').value=a.candidates.join(', ');$('#illumAngle').value='';$('#illumObservation').value='';$('#illumNewFog').value='';$('#illumDialog').showModal()};
+window.recordOpt=choice=>{state.history.push({kind:'optometry',address:addr().id,time:new Date().toISOString(),lens_a:state.optA,lens_b:state.optB,choice,claim:'perceptual-usefulness-only'});renderCaddy();alert('Optometry receipt recorded: '+choice)};
+$('#lensBar').addEventListener('click',e=>{const b=e.target.closest('[data-lens]');if(!b)return;state.lens=b.dataset.lens;render()});
+$('#stage').addEventListener('change',e=>{if(e.target.id==='optA'){state.optA=e.target.value;renderStage()}if(e.target.id==='optB'){state.optB=e.target.value;renderStage()}});
+$('#recordIllumBtn').addEventListener('click',e=>{e.preventDefault();const a=addr(),before=[...a.candidates],after=$('#illumAfter').value.split(',').map(x=>x.trim()).filter(Boolean),effect=$('#illumEffect').value,newFog=$('#illumNewFog').value.split(',').map(x=>x.trim()).filter(Boolean);const h={kind:'illumination',time:new Date().toISOString(),address:a.id,lamp_id:pendingLamp.id,lamp_name:pendingLamp.name,angle:$('#illumAngle').value.trim(),selection_origin:$('#illumOrigin').value,effect,before_candidates:before,after_candidates:after,observation:$('#illumObservation').value.trim(),new_fog:newFog};state.history.push(h);a.candidates=after;if(newFog.length)a.fog.composition=[...new Set([...(a.fog.composition||[]),...newFog])];a.receipts=a.receipts||[];a.receipts.push({id:'illum-'+state.history.length,kind:effect,text:h.observation||`${pendingLamp.name}: ${effect}`});$('#illumDialog').close();render()});
+$('#loadBtn').onclick=()=>$('#fileInput').click();$('#fileInput').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.addresses)||!Array.isArray(d.lamps))throw new Error('JSON needs addresses[] and lamps[]');state={...state,data:d,selected:d.addresses[0]?.id||null,history:[],lens:'look'};render()}catch(err){alert('Import failed: '+err.message)}};r.readAsText(f)};
+$('#resetBtn').onclick=()=>{state={data:structuredClone(specimen),lens:'look',selected:'p',history:[],optA:'fog',optB:'spatial'};render()};
+$('#exportBtn').onclick=()=>{const out={schema:'fog-glasses/session-v0',exported_at:new Date().toISOString(),data:state.data,illumination_history:state.history,guardrails:{candidate_count_is_not_probability:true,persistent_fog_is_not_ontology:true,intuition_is_not_evidence:true,outside_is_not_maximum_fog:true}};const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='fog-glasses-receipt-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};
+$('#makeLampBtn').onclick=()=>$('#lampDialog').showModal();$('#saveLampBtn').onclick=e=>{e.preventDefault();const name=$('#lampName').value.trim();if(!name)return;const addresses=$('#lampAddresses').value.split(',').map(x=>x.trim()).filter(Boolean);state.data.lamps.push({id:name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'-'+(state.data.lamps.length+1),name,description:$('#lampDesc').value.trim(),distinguishes:addresses.map(address=>({address,pairs:[]})),may_reveal:$('#lampReveal').value.split(',').map(x=>x.trim()).filter(Boolean),created_by:'human'});$('#lampForm').reset();$('#lampDialog').close();render()};
+$('#addAddressBtn').onclick=()=>$('#addressDialog').showModal();$('#saveAddressBtn').onclick=e=>{e.preventDefault();const id=$('#addrId').value.trim(),label=$('#addrLabel').value.trim();if(!id||!label)return;if(state.data.addresses.some(a=>a.id===id)){alert('Address ID already exists');return}const candidates=$('#addrCandidates').value.split(',').map(x=>x.trim()).filter(Boolean),comp=$('#addrComposition').value.split(',').map(x=>x.trim()).filter(Boolean),receipt=$('#addrReceipt').value.trim();state.data.addresses.push({id,label,note:$('#addrNote').value.trim(),candidates,fog:{density:candidates.length?0.5:0,grain:'unknown',composition:comp.length?comp:(candidates.length?['untyped']:['outside-model']),depth:1,motion:'unknown',persistence:1,origin:$('#addrOrigin').value},receipts:receipt?[{id:'user-'+Date.now(),kind:'observation',text:receipt}]:[]});state.selected=id;$('#addressForm').reset();$('#addressDialog').close();render()};
+// drop-to-import anywhere on the stage
+['dragenter','dragover'].forEach(ev=>document.addEventListener(ev,e=>{e.preventDefault()}));document.addEventListener('drop',e=>{e.preventDefault();const f=e.dataTransfer.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.addresses)||!Array.isArray(d.lamps))throw new Error('JSON needs addresses[] and lamps[]');state.data=d;state.selected=d.addresses[0]?.id||null;state.history=[];render()}catch(err){alert('Drop import failed: '+err.message)}};r.readAsText(f)});
+render();
+</script>
+</body>
+</html>
