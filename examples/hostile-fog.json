@@ -1,0 +1,155 @@
+{
+  "title": "Hostile Fog Specimen",
+  "source": "Two unresolved addresses have the same candidate count but different candidate identities and different useful probes. A third address is outside the declared model rather than merely maximally ambiguous.",
+  "addresses": [
+    {
+      "id": "p",
+      "label": "Receipt cluster P",
+      "note": "Who generated the duplicated line?",
+      "candidates": [
+        "A",
+        "B"
+      ],
+      "fog": {
+        "density": 0.55,
+        "grain": "coarse",
+        "composition": [
+          "provenance-break",
+          "indiscernibility"
+        ],
+        "depth": 2,
+        "motion": "stable",
+        "persistence": 3,
+        "origin": "unknown"
+      },
+      "receipts": [
+        {
+          "id": "r1",
+          "kind": "claim",
+          "text": "A and B reproduce the same sentence."
+        },
+        {
+          "id": "r2",
+          "kind": "missing",
+          "text": "Original source lineage is unavailable."
+        }
+      ]
+    },
+    {
+      "id": "q",
+      "label": "Receipt cluster Q",
+      "note": "Which event ordering is compatible?",
+      "candidates": [
+        "C",
+        "D"
+      ],
+      "fog": {
+        "density": 0.55,
+        "grain": "fine",
+        "composition": [
+          "timestamp-conflict",
+          "indiscernibility"
+        ],
+        "depth": 3,
+        "motion": "drifting",
+        "persistence": 1,
+        "origin": "receipt-field"
+      },
+      "receipts": [
+        {
+          "id": "r3",
+          "kind": "conflict",
+          "text": "Receipt 3 places the event before publication."
+        },
+        {
+          "id": "r4",
+          "kind": "conflict",
+          "text": "Receipt 4 places publication before the event."
+        }
+      ]
+    },
+    {
+      "id": "r",
+      "label": "Outside-model observation",
+      "note": "No declared candidate explains the observation.",
+      "candidates": [],
+      "fog": {
+        "density": 0,
+        "grain": "n/a",
+        "composition": [
+          "outside-model"
+        ],
+        "depth": 1,
+        "motion": "unknown",
+        "persistence": 1,
+        "origin": "model-or-world"
+      },
+      "receipts": [
+        {
+          "id": "r5",
+          "kind": "outside",
+          "text": "Observation is incompatible with all declared candidates."
+        }
+      ]
+    }
+  ],
+  "lamps": [
+    {
+      "id": "provenance",
+      "name": "Provenance Trace",
+      "description": "Follow source lineage and copy relationships.",
+      "distinguishes": [
+        {
+          "address": "p",
+          "pairs": [
+            [
+              "A",
+              "B"
+            ]
+          ]
+        }
+      ],
+      "may_reveal": [
+        "copy-chain",
+        "missing-origin",
+        "source-dependence"
+      ]
+    },
+    {
+      "id": "chronology",
+      "name": "Chronology",
+      "description": "Inspect ordering, timestamps, and known-at relations.",
+      "distinguishes": [
+        {
+          "address": "q",
+          "pairs": [
+            [
+              "C",
+              "D"
+            ]
+          ]
+        }
+      ],
+      "may_reveal": [
+        "ordering",
+        "timestamp-drift",
+        "publication-lag"
+      ]
+    },
+    {
+      "id": "model-boundary",
+      "name": "Model Boundary Test",
+      "description": "Ask whether the declared candidate family is itself incomplete.",
+      "distinguishes": [
+        {
+          "address": "r",
+          "pairs": []
+        }
+      ],
+      "may_reveal": [
+        "outside-domain",
+        "new-candidate-needed"
+      ]
+    }
+  ]
+}
